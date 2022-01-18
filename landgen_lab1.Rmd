@@ -1,0 +1,245 @@
+---
+title: "Landscape Genetics Lab 1- Importing Genetic Data"
+author: "Lexi"
+date: "1/16/2022"
+output: html_document
+---
+
+<style type="text/css">
+
+body{ /* Normal  */
+      font-size: 18px; font-family: Helvetica; color: #fefae0;
+}
+h1.title {
+  font-size: 40px;
+  color: #dda15e; font-family: Helvetica;
+}
+
+</style>
+<body style="background-color:#283618;">
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Here we will load the necessary package for the course:
+
+```{r}
+if (!require("remotes")) install.packages("remotes")
+remotes::install_github("hhwagner1/LandGenCourse")
+library(LandGenCourse)
+
+if(!require("adegenet")) install.packages("adegenet")
+if(!requireNamespace("popgraph", quietly = TRUE))
+{
+  install.packages(c("RgoogleMaps", "geosphere", "proto", "sampling", 
+                      "seqinr", "spacetime", "spdep"), dependencies=TRUE)
+  remotes::install_github("dyerlab/popgraph")
+}
+if(!requireNamespace("gstudio", quietly = TRUE)) remotes::install_github("dyerlab/gstudio")
+```
+
+and now we load in packages:
+```{r}
+library(adegenet)
+library(gstudio)
+library(LandGenCourse)
+library(tibble)
+library(here)
+library(vcfR)
+library(pinfsc50)
+library(utils)
+```
+
+
+We will use class-provided data to work through all examples. 
+Let's import the data:
+```{r}
+Frogs<-data.frame(ralu.loci)
+```
+Now we need to create an individual ID for each frog:
+```{r}
+Frogs <- data.frame(FrogID = paste(substr(Frogs$Pop, 1, 3), row.names(Frogs), sep="."), Frogs)
+as_tibble(Frogs)
+```
+Change to .genind format:
+
+```{r}
+Frogs.genind <- df2genind(X=Frogs[,c(4:11)], sep=":", ncode=NULL, ind.names= Frogs$FrogID, loc.names=NULL, pop=Frogs$Pop, NA.char="NA", ploidy=2, type="codom", strata=NULL, hierarchy=NULL)
+```
+
+Summarize the genind data:
+```{r}
+summary(Frogs.genind)
+```
+
+Table with allele counts:
+```{r}
+as_tibble(Frogs.genind@tab)
+```
+Number of alleles per locus, across all populations:
+```{r}
+Frogs.genind@loc.n.all
+```
+This is a factor that indicates for each allele (column in @tab) which locus it belongs to. The levels of the factor correspond to the loci:
+```{r}
+Frogs.genind@loc.fac
+```
+List of allele names, separately for each locus. Note: the alleles are treated as text (character), even if they are coded as numbers. They are sorted in order of occurrence in data set:
+```{r}
+Frogs.genind@all.names
+```
+Further slots
+The following slots are automatically filled with default values unless specified by user during import into genind object:
+
+Slot @ploidy: ploidy for each individual.
+Slot @type: codominant (microsatellites) or presence/absence (SNP, AFLP)
+The following slots may be empty unless specified during or after import into ‘genind’ object:
+
+Slot @other: placeholder for non-genetic data, e.g. spatial coordinates of individuals.
+Slot @pop: vector indicating the population that each individual belongs to.
+Slot @strata: stratification of populations, e.g. within regions or treatments.
+Slot @hierarchy: optional formula defining hierarchical levels in strata.
+
+Import data with ‘gstudio’ package
+While genind objects are used by many functions for analyzing genetic data, the gstudio package provides an interface for additional analysis. We use the function read_population to import the data.
+```{r}
+Frogs.gstudio <- read_population(path=system.file("extdata", "ralu.loci.csv", 
+                                                  package = "LandGenCourse"), 
+                   type="separated", locus.columns=c(3:10), 
+                   phased=FALSE, sep=",", header=TRUE)
+```
+
+Check imported data
+Check the column types: SiteName and Pop are now character vectors, and the loci columns A - H are now of class locus (it is indicated that ‘locus’ is a S3 object type).
+```{r}
+str(Frogs.gstudio)
+```
+Add FrogID
+Frogs.gstudio is a data frame, and we can manipulate like any other data frame. Here we will add the variable FrogID as the first column.
+```{r}
+Frogs.gstudio <- data.frame(FrogID=Frogs$FrogID, Frogs.gstudio) 
+head(Frogs.gstudio)
+```
+Convert to ‘genind’ object
+We can use the dataframe with the locus objects from gstudio to import the data into a genind object. In this case, we set sep=":", because the locus object in gstudio stores the alleles at each locus separated by a colon, and NA.char="", because gstudio stores missing values as empty cells.
+```{r}
+Frogs.genind2 <- adegenet::df2genind(X=Frogs.gstudio[,c(4:11)], sep=":", ncode=NULL,   
+                          ind.names=Frogs.gstudio$FrogID, loc.names=NULL, 
+                          pop=Frogs.gstudio$Pop, NA.char="", ploidy=2, 
+                          type="codom", strata=NULL, hierarchy=NULL)
+Frogs.genind2
+```
+
+mporting SNP data
+a. Import from text file
+First, we’ll import a relatively small SNP dataset from a text file. This dataset will be analyzed in the Week 6 Worked Example. The data are stored in a tab-delimited text file.
+
+Let’s have a look at the first few rows and columns:
+
+family: these are ID’s of the genotyped tree individuals (from which seeds were grown in a common-garden experiment, hence they are called “family” in the dataset).
+population: the trees were sampled from a set of populations.
+snpXXX.Plmn: each column is a diploid SNP.
+To import your own data, replace infile by the path to the text file with your SNP data. Change settings as necessary (check whether data are separated by tabs or commas!).
+```{r}
+infile <- system.file("extdata", "WWP_SNP_genotypes.txt", package = "LandGenCourse")
+Trees <- read.table(infile, header = TRUE, sep = "\t")
+Trees[1:6, 1:6]
+```
+We should replace the SNP column names: if they contain a period ., then the function df2genind thinks that the first part indicates the locus and the second part the allele. The following line of code splits each column name by the period and only retains the first part.
+```{r}
+names(Trees) <- unlist(lapply(names(Trees), function(x) strsplit(x, "[.]")[[1]][1]))
+```
+
+To import these data frame into a genind object, we need to tell R how the SNP data are coded (check the df2genind help file!)
+
+ncode = 1: each allele (A, C, G, T) is coded with a single character.
+sep = "": the two alleles per individual and locus are not separated by any symbol.
+NA.char= "NA": missing values are coded as NA.
+```{r}
+Trees.genind <- adegenet::df2genind(X=Trees[,-c(1:2)], sep="", ncode=1,   
+                          ind.names=Trees$family, loc.names=NULL, 
+                          pop=Trees$population, NA.char="NA", ploidy=2, 
+                          type="codom", strata=NULL, hierarchy=NULL)
+Trees.genind
+```
+Import from vcf file to genind object
+The R package vcfR makes it easy to import vcf files and convert to other formats. Here we use it to convert the data into a genind object. The following code is adapted from the above listed vcfR vignettes.
+
+We’ll import a file that is distributed with the pinfsc50 package. Note that vcf files are commonly compressed in gz archives. To import your own data, replace vcf_file by the path to your own gz archive.
+```{r}
+vcf_file <- system.file("extdata", "pinf_sc50.vcf.gz", package = "pinfsc50")
+vcf <- read.vcfR( vcf_file, verbose = FALSE )
+```
+Note that the package vcfR can import three types of genomic data files listed below. We will only use the .vcf file here.
+
+.vcf: SNPs
+.fasta: genomic reference sequence data
+.gff: annotation
+Convert to genind object:
+```{r}
+SNP_genind <- vcfR2genind(vcf)
+SNP_genind
+```
+Import from vcf file to genlight object
+This dataset has 18 individuals genotyped at 44,137. It may be better to use a genlight object instead of genind. This is an alternative object type from the package adegenet that can store large genomic data much more efficiently.
+
+Note: the current implementation can only store two alleles per locus, loci with more alleles will be dropped and a warning is printed.
+```{r}
+SNP_genlight <- vcfR2genlight(vcf)
+```
+```{r}
+SNP_genlight
+```
+Note that instead of 44,137 alleles, we now have 21,719 binary SNPs. This is one of the ways by which the genlight object is more efficient than genind. Overall, the size has been reduced from 16.4 Mb to 2.2 Mb!
+
+## NOW I TRY
+load in old 2016 KAD data
+```{r}
+kad_data <- read.csv("~/Desktop/landscape_genetics_2022/labs/landgen_lab1/KAD_originaldata.csv")
+```
+
+
+```{r}
+Kad.genind <- df2genind(X=kad_data[,c(3:24)], sep="column", ncode=NULL, ind.names= kad_data$useful_id, loc.names=NULL, pop=kad_data$population_id, NA.char="NA", ploidy=2, type="codom", strata=NULL, hierarchy=NULL)
+```
+
+```{r}
+Kad.genind
+```
+summarize the data
+```{r}
+summary(Kad.genind)
+```
+allele counts, where each column is an allele
+```{r}
+as_tibble(Kad.genind@tab)
+```
+Number of alleles per locus, across all populations.
+```{r}
+Kad.genind@loc.n.all
+```
+This is a factor that indicates for each allele (column in @tab) which locus it belongs to. The levels of the factor correspond to the loci.
+```{r}
+Kad.genind@loc.fac
+```
+List of allele names, separately for each locus. Note: the alleles are treated as text (character), even if they are coded as numbers. They are sorted in order of occurrence in data set.
+```{r}
+Kad.genind@all.names
+```
+ploidy for each individual (should be 2)
+```{r}
+Kad.genind@ploidy
+```
+
+codominant (microsatellites) or presence/absence (SNP, AFLP)
+```{r}
+Kad.genind@type
+```
+vector indicating the population that each individual belongs to
+```{r}
+Kad.genind@pop
+```
+
+
