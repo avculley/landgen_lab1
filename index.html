@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Lexi" />
+<meta name="author" content="Alexis V. Culley" />
 
 
 <title>Landscape Genetics Lab 1- Importing Genetic Data</title>
@@ -61,6 +61,7 @@ if (window.hljs) {
 
 
 
+
 <style type="text/css">
 .main-container {
   max-width: 940px;
@@ -81,6 +82,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -165,8 +169,7 @@ pre code {
 
 
 <h1 class="title toc-ignore">Landscape Genetics Lab 1- Importing Genetic Data</h1>
-<h4 class="author">Lexi</h4>
-<h4 class="date">1/16/2022</h4>
+<h4 class="author">Alexis V. Culley</h4>
 
 </div>
 
@@ -174,25 +177,116 @@ pre code {
 <style type="text/css">
 
 body{ /* Normal  */
-      font-size: 18px; font-family: Helvetica; color: #fefae0;
+      font-size: 16px; font-family: Helvetica; color: #EAECE8;
 }
 h1.title {
   font-size: 40px;
-  color: #dda15e; font-family: Helvetica;
+  color: #EAECE8; font-family: Helvetica;
 }
 
 </style>
-<body style="background-color:#283618;">
-<p>Here we will load the necessary package for the course:</p>
-<pre class="r"><code>if (!require(&quot;remotes&quot;)) install.packages(&quot;remotes&quot;)</code></pre>
-<pre><code>## Loading required package: remotes</code></pre>
-<pre class="r"><code>remotes::install_github(&quot;hhwagner1/LandGenCourse&quot;)</code></pre>
-<pre><code>## Skipping install of &#39;LandGenCourse&#39; from a github remote, the SHA1 (20a211f4) has not changed since last install.
-##   Use `force = TRUE` to force installation</code></pre>
-<pre class="r"><code>library(LandGenCourse)
+<body style="background-color:#20161E;">
+<div id="introduction-to-landscape-genetics-lab-1" class="section level1">
+<h1><em>Introduction to Landscape Genetics (Lab 1)</em></h1>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>The most basic level of biological diversity that determines the success of species, populations, and ecosystems is <strong>genetic variation</strong>, influencing the fitness and survival of individuals and the ability for species to adapt from environmental change. Examining genetic diversity in a species can help researchers estimate the viability of populations, determine the degree to which an organism can adapt to environmental changes, and identify factors that can influence genetic diversity.</p>
+<div id="what-is-landscape-genetics" class="section level3">
+<h3>What is Landscape Genetics?</h3>
+<p>Landscape Genetics is research that combines <strong>population genetics</strong>, <strong>landscape ecology</strong>, and spatial analytical techniques to explicitly quantify the effects of landscape composition, configuration, and matrix quality on microevolutionary processes, such as <strong>gene flow</strong>, <strong>genetic drift</strong>, and selection, using neutral and adaptive genetic data.</p>
+</div>
+</div>
+<div id="defining-landscape-genetics-in-3-steps" class="section level2">
+<h2>Defining Landscape Genetics in 3 Steps</h2>
+<p><strong>1)</strong> Measure genetic variation so we can quantify microevolutionary processes.</p>
+<p><strong>2)</strong> Quantify landscape heterogeneity in order to capture the composition, configuration, and/or matrix quality of the study landscape.</p>
+<p><strong>3)</strong> Statistically link landscape heterogeneity and genetic variation, so that we can explicitly and quantitatively test for genetic relationships.</p>
+</div>
+<div id="key-definitions" class="section level2">
+<h2>Key Definitions:</h2>
+<div id="population-genetics" class="section level3">
+<h3>Population Genetics</h3>
+<p>The study of the genetic composition of populations, including distributions and changes in genotype and phenotype frequency in response to the processes of natural selection, genetic drift, mutation and gene flow.</p>
+</div>
+<div id="landscape-ecology" class="section level3">
+<h3>Landscape Ecology</h3>
+<p>The study of the pattern and interaction between ecosystems within a region of interest, and the way the interactions affect ecological processes, especially the unique effects of spatial heterogeneity on these interactions.</p>
+</div>
+<div id="genetic-variation" class="section level3">
+<h3>Genetic Variation</h3>
+<p>The presence of differences in sequences of genes between individual organisms of a species. It enables natural selection, one of the primary forces driving the evolution of life.</p>
+</div>
+<div id="gene-flow" class="section level3">
+<h3>Gene Flow</h3>
+<p>The transfer of genetic material from one population to another.</p>
+</div>
+<div id="genetic-drift" class="section level3">
+<h3>Genetic Drift</h3>
+<p>Genetic drift is the drifting of the frequency of an allele relative to that of the other alleles in a population over time as a result of a chance or random event.</p>
+</div>
+<div id="landscape" class="section level3">
+<h3>Landscape</h3>
+<p>A system of interacting ecological patterns and processes at any scale and can be considered to be an area that is spatially heterogeneous in at least one factor of interest at a scale relevant to the pattern-process relationships related to that factor of interest.</p>
+</div>
+<div id="thematic-content" class="section level3">
+<h3>Thematic Content</h3>
+<p>The factors included within the landscape definition, such as landcover categories, abiotic variables, linear features, and topographical landforms. Choice of which factors to include in the landscape definition should be guided by a priori hypotheses about how these features will affect the pattern-process relationship of interest, which in landscape genetics may be gene flow, genetic diversity or adaptive evolutionary processes.</p>
+</div>
+<div id="thematic-resolution" class="section level3">
+<h3>Thematic Resolution</h3>
+<p>The resolution or functional form at which the variables included in the landscape definition (thematic content) are represented in the landscape definition. For categorical variables such as land cover this will involve choice of how many map classes to represent. For continuous variables such as elevation or canopy cover thematic resolution will be the functional form of the relationship between the variable and the response, such as linear, quadratic, exponential, Gaussian, and power functions. Choices about thematic resolution should be governed by a priori hypotheses or prior knowledge about the relationship between the landscape variable and the pattern-process relationship of interest.</p>
+</div>
+<div id="grain" class="section level3">
+<h3>Grain</h3>
+<p>In the context of landscape definition, grain refers to the dimension of the smallest resolved element in the landscape, and is typically corresponds to pixel size in a raster landscape and to minimum mapped patch size in a vector representation of a landscape.</p>
+</div>
+<div id="extent" class="section level3">
+<h3>Extent</h3>
+<p>The area within the landscape boundary and defines the population for the analysis.</p>
+</div>
+<div id="landscape-definition" class="section level3">
+<h3>Landscape Definition</h3>
+<p>The spatial definition of the landscape data utilized for analysis, including the thematic content, thematic resolution, grain and extent.</p>
+</div>
+<div id="functional-connectivity" class="section level3">
+<h3>Functional Connectivity</h3>
+<p>The degree towhich landscape composition facilitates or impedes movement.</p>
+</div>
+</div>
+</div>
+<div id="lab-example-1" class="section level1">
+<h1>Lab Example 1</h1>
+<div id="overview" class="section level3">
+<h3>Overview:</h3>
+<p>In this lab you will learn:</p>
+<ul>
+<li><p>How microsatellite data may be coded in a spreadsheet.</p></li>
+<li><p>How such a file is imported into R.</p></li>
+<li><p>How the data are imported into a ‘genind’ object using package ‘adegenet.’</p></li>
+<li><p>How to view information stored in a ‘genind’ object.</p></li>
+<li><p>How to import the data with the ‘gstudio’ package.</p></li>
+<li><p>How to import SNP data</p></li>
+</ul>
+</div>
+<div id="download-packages-needed-for-this-series-of-landscape-genetics-labs" class="section level3">
+<h3>Download packages needed for this series of Landscape Genetics labs</h3>
+<p><em>Remove #’s to make the code work. Try not to run this code again after installing everything successfully</em></p>
+<pre class="r"><code>#if (!require(&quot;remotes&quot;)) install.packages(&quot;remotes&quot;)
+#remotes::install_github(&quot;hhwagner1/LandGenCourse&quot;)
+#library(LandGenCourse)
 
-if(!require(&quot;adegenet&quot;)) install.packages(&quot;adegenet&quot;)</code></pre>
-<pre><code>## Loading required package: adegenet</code></pre>
+#if(!require(&quot;adegenet&quot;)) install.packages(&quot;adegenet&quot;)
+#if(!requireNamespace(&quot;popgraph&quot;, quietly = TRUE))
+#{
+#  install.packages(c(&quot;RgoogleMaps&quot;, &quot;geosphere&quot;, &quot;proto&quot;, &quot;sampling&quot;, 
+#                      &quot;seqinr&quot;, &quot;spacetime&quot;, &quot;spdep&quot;), dependencies=TRUE)
+#  remotes::install_github(&quot;dyerlab/popgraph&quot;)
+#}
+#if(!requireNamespace(&quot;gstudio&quot;, quietly = TRUE)) remotes::install_github(&quot;dyerlab/gstudio&quot;)</code></pre>
+</div>
+<div id="load-needed-packages" class="section level3">
+<h3>Load needed packages</h3>
+<pre class="r"><code>library(adegenet)</code></pre>
 <pre><code>## Loading required package: ade4</code></pre>
 <pre><code>## 
 ##    /// adegenet 2.1.5 is loaded ////////////
@@ -200,18 +294,7 @@ if(!require(&quot;adegenet&quot;)) install.packages(&quot;adegenet&quot;)</code>
 ##    &gt; overview: &#39;?adegenet&#39;
 ##    &gt; tutorials/doc/questions: &#39;adegenetWeb()&#39; 
 ##    &gt; bug reports/feature requests: adegenetIssues()</code></pre>
-<pre class="r"><code>if(!requireNamespace(&quot;popgraph&quot;, quietly = TRUE))
-{
-  install.packages(c(&quot;RgoogleMaps&quot;, &quot;geosphere&quot;, &quot;proto&quot;, &quot;sampling&quot;, 
-                      &quot;seqinr&quot;, &quot;spacetime&quot;, &quot;spdep&quot;), dependencies=TRUE)
-  remotes::install_github(&quot;dyerlab/popgraph&quot;)
-}
-if(!requireNamespace(&quot;gstudio&quot;, quietly = TRUE)) remotes::install_github(&quot;dyerlab/gstudio&quot;)</code></pre>
-<pre><code>## Warning: multiple methods tables found for &#39;direction&#39;</code></pre>
-<pre><code>## Warning: multiple methods tables found for &#39;gridDistance&#39;</code></pre>
-<p>and now we load in packages:</p>
-<pre class="r"><code>library(adegenet)
-library(gstudio)</code></pre>
+<pre class="r"><code>library(gstudio)</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;gstudio&#39;</code></pre>
 <pre><code>## The following objects are masked from &#39;package:adegenet&#39;:
@@ -230,9 +313,17 @@ library(here)</code></pre>
 ##    *****       *****      *****       *****</code></pre>
 <pre class="r"><code>library(pinfsc50)
 library(utils)</code></pre>
-<p>We will use class-provided data to work through all examples. Let’s import the data:</p>
+</div>
+<div id="adding-and-managing-data" class="section level3">
+<h3>Adding and Managing Data</h3>
+<p>We will use class-provided data from Landscape Genetics (DGS 2022) for the first work-through examples.</p>
+<p>This code imports genetic data from 181 individuals of Colombia spotted frogs (Rana luteiventris) from 12 populations. The data are a subsample of the full data set analyzed in Funk et al. (2005) and Murphy et al. (2010).</p>
+<ul>
+<li>ralu.loci: Data frame with populations and genetic data (181 rows x 9 columns). Included in package LandGenCourse.</li>
+</ul>
+<p>Let’s import the data:</p>
 <pre class="r"><code>Frogs&lt;-data.frame(ralu.loci)</code></pre>
-<p>Now we need to create an individual ID for each frog:</p>
+<p>We’ll add unique ID’s for the frogs (to show how these would be imported). Here we take, for each frog, a sub-string of Pop containing the first three letters, add the row number, and separate them by a period.</p>
 <pre class="r"><code>Frogs &lt;- data.frame(FrogID = paste(substr(Frogs$Pop, 1, 3), row.names(Frogs), sep=&quot;.&quot;), Frogs)
 as_tibble(Frogs)</code></pre>
 <pre><code>## # A tibble: 181 × 11
@@ -249,9 +340,50 @@ as_tibble(Frogs)</code></pre>
 ##  9 Air.9  AirplaneLake Airplane 3:1   1:1   1:1   1:1   1:7   1:1   1:1   3:5  
 ## 10 Air.10 AirplaneLake Airplane 2:2   1:3   1:1   1:1   3:7   1:1   1:1   3:3  
 ## # … with 171 more rows</code></pre>
-<p>Change to .genind format:</p>
+<p>Set all arguments of function ‘df2genind’</p>
+<p>Some explanations:</p>
+<ul>
+<li><p><strong>X:</strong> this is the data frame (or matrix) containing the loci only. Hence we need columns 4 - 11.</p></li>
+<li><p><strong>sep:</strong> need to specify the separator between alleles (here: colon)</p></li>
+<li><p><strong>ncode:</strong> not needed here because we used a separator, defined under sep.</p></li>
+<li><p><strong>ind.names:</strong> here we should indicate the column FrogID.</p></li>
+<li><p><strong>loc.names:</strong> by default this will use the column names of the loci.</p></li>
+<li><p><strong>pop:</strong> here we should indicate either the column Pop or SiteName.</p></li>
+<li><p><strong>NA.char:</strong> how were missing values coded? Here: NA.</p></li>
+<li><p><strong>ploidy:</strong> this species is diploid, hence 2.</p></li>
+<li><p><strong>type:</strong> marker type, either “codom” for codominant markers like microsatellites, or “PA” for presence-absence, such as SNP or AFLP markers. Note: you can use either “” or ’’.</p></li>
+<li><p><strong>strata:</strong> one way of defining hierarchical sampling levels. We will add this in Week 3.</p></li>
+<li><p><strong>hierarchy:</strong> another way of defining hierarchical sampling levels. We’ll skip it for now.</p></li>
+</ul>
 <pre class="r"><code>Frogs.genind &lt;- df2genind(X=Frogs[,c(4:11)], sep=&quot;:&quot;, ncode=NULL, ind.names= Frogs$FrogID, loc.names=NULL, pop=Frogs$Pop, NA.char=&quot;NA&quot;, ploidy=2, type=&quot;codom&quot;, strata=NULL, hierarchy=NULL)</code></pre>
-<p>Summarize the genind data:</p>
+<p>Check the data!</p>
+<p>Printing the genind object’s name lists the number of individuals, loci and alleles, and lists all slots (prefaced by @).</p>
+<pre class="r"><code>Frogs.genind</code></pre>
+<pre><code>## /// GENIND OBJECT /////////
+## 
+##  // 181 individuals; 8 loci; 39 alleles; size: 55.2 Kb
+## 
+##  // Basic content
+##    @tab:  181 x 39 matrix of allele counts
+##    @loc.n.all: number of alleles per locus (range: 3-9)
+##    @loc.fac: locus factor for the 39 columns of @tab
+##    @all.names: list of allele names for each locus
+##    @ploidy: ploidy of each individual  (range: 2-2)
+##    @type:  codom
+##    @call: df2genind(X = Frogs[, c(4:11)], sep = &quot;:&quot;, ncode = NULL, ind.names = Frogs$FrogID, 
+##     loc.names = NULL, pop = Frogs$Pop, NA.char = &quot;NA&quot;, ploidy = 2, 
+##     type = &quot;codom&quot;, strata = NULL, hierarchy = NULL)
+## 
+##  // Optional content
+##    @pop: population of each individual (group size range: 7-23)</code></pre>
+</div>
+<div id="summarize-genind-object" class="section level3">
+<h3>Summarize ‘genind’ object</h3>
+<p>There is a summary function for genind objects. Notes:</p>
+<ul>
+<li><p>Group here refers to the populations, i.e., Group sizes means number of individuals per population.</p></li>
+<li><p>It is a good idea to check the percentage of missing values here. If it is 0%, this may indicate that the coding for missing values was not recognized. If the % missing is very high, on the other hand, there may be some other importing problem.</p></li>
+</ul>
 <pre class="r"><code>summary(Frogs.genind)</code></pre>
 <pre><code>## 
 ## // Number of individuals: 181
@@ -261,7 +393,13 @@ as_tibble(Frogs)</code></pre>
 ## // Percentage of missing data: 10.64 %
 ## // Observed heterozygosity: 0.1 0.4 0.09 0.36 0.68 0.02 0.38 0.68
 ## // Expected heterozygosity: 0.17 0.47 0.14 0.59 0.78 0.02 0.48 0.74</code></pre>
-<p>Table with allele counts:</p>
+</div>
+<div id="view-information-stored-in-genind-object" class="section level2">
+<h2>View information stored in ‘genind’ object</h2>
+<p>The summary lists each attribute or slot of the genind object and summarizes its content. Technically speaking, genind objects are S4 objects in R, which means that their slots are accessed with the @ sign, rather than the $ sign for attributes of the more commonly used S3 objects. Interestingly, the object does not store the data table that was imported, but converts it to a table of allele counts.</p>
+<div id="slot-tab" class="section level3">
+<h3>Slot <span class="citation">@tab</span></h3>
+<p>Table with allele counts, where each column is an allele. Allele name A.1 means “locus A, allele 1.” For a codominant marker (e.g. microsatellite) and a diploid species, allele counts per individual can be 0, 1, 2, or NA=missing. Here are the first few lines:</p>
 <pre class="r"><code>as_tibble(Frogs.genind@tab)</code></pre>
 <pre><code>## # A tibble: 181 × 39
 ##      A.1   A.2   A.3   B.1   B.3   B.2   B.4   C.1   C.2   C.4   C.5   D.1   D.2
@@ -281,15 +419,24 @@ as_tibble(Frogs)</code></pre>
 ## #   E.4 &lt;int&gt;, E.10 &lt;int&gt;, F.1 &lt;int&gt;, F.2 &lt;int&gt;, F.3 &lt;int&gt;, G.1 &lt;int&gt;,
 ## #   G.2 &lt;int&gt;, G.3 &lt;int&gt;, G.5 &lt;int&gt;, H.4 &lt;int&gt;, H.5 &lt;int&gt;, H.3 &lt;int&gt;,
 ## #   H.2 &lt;int&gt;, H.1 &lt;int&gt;, H.6 &lt;int&gt;, H.8 &lt;int&gt;, H.7 &lt;int&gt;</code></pre>
+</div>
+<div id="slot-loc.n.all" class="section level3">
+<h3>Slot <span class="citation">@loc.n.all</span></h3>
 <p>Number of alleles per locus, across all populations:</p>
 <pre class="r"><code>Frogs.genind@loc.n.all</code></pre>
 <pre><code>## A B C D E F G H 
 ## 3 4 4 4 9 3 4 8</code></pre>
+</div>
+<div id="slot-loc.fac" class="section level3">
+<h3>Slot <span class="citation">@loc.fac</span></h3>
 <p>This is a factor that indicates for each allele (column in <span class="citation">@tab</span>) which locus it belongs to. The levels of the factor correspond to the loci:</p>
 <pre class="r"><code>Frogs.genind@loc.fac</code></pre>
 <pre><code>##  [1] A A A B B B B C C C C D D D D E E E E E E E E E F F F G G G G H H H H H H H
 ## [39] H
 ## Levels: A B C D E F G H</code></pre>
+</div>
+<div id="slot-all.names" class="section level3">
+<h3>Slot <span class="citation">@all.names</span></h3>
 <p>List of allele names, separately for each locus. Note: the alleles are treated as text (character), even if they are coded as numbers. They are sorted in order of occurrence in data set:</p>
 <pre class="r"><code>Frogs.genind@all.names</code></pre>
 <pre><code>## $A
@@ -315,15 +462,47 @@ as_tibble(Frogs)</code></pre>
 ## 
 ## $H
 ## [1] &quot;4&quot; &quot;5&quot; &quot;3&quot; &quot;2&quot; &quot;1&quot; &quot;6&quot; &quot;8&quot; &quot;7&quot;</code></pre>
-<p>Further slots The following slots are automatically filled with default values unless specified by user during import into genind object:</p>
-<p>Slot <span class="citation">@ploidy</span>: ploidy for each individual. Slot <span class="citation">@type</span>: codominant (microsatellites) or presence/absence (SNP, AFLP) The following slots may be empty unless specified during or after import into ‘genind’ object:</p>
-<p>Slot <span class="citation">@other</span>: placeholder for non-genetic data, e.g. spatial coordinates of individuals. Slot <span class="citation">@pop</span>: vector indicating the population that each individual belongs to. Slot <span class="citation">@strata</span>: stratification of populations, e.g. within regions or treatments. Slot <span class="citation">@hierarchy</span>: optional formula defining hierarchical levels in strata.</p>
-<p>Import data with ‘gstudio’ package While genind objects are used by many functions for analyzing genetic data, the gstudio package provides an interface for additional analysis. We use the function read_population to import the data.</p>
+</div>
+<div id="further-slots" class="section level3">
+<h3>Further slots</h3>
+<p>The following slots are automatically filled with default values unless specified by user during import into genind object:</p>
+<ul>
+<li><p>Slot <span class="citation">@ploidy</span>: ploidy for each individual.</p></li>
+<li><p>Slot <span class="citation">@type</span>: codominant (microsatellites) or presence/absence (SNP, AFLP)</p></li>
+</ul>
+<p>The following slots may be empty unless specified during or after import into ‘genind’ object:</p>
+<ul>
+<li><p>Slot <span class="citation">@other</span>: placeholder for non-genetic data, e.g. spatial coordinates of individuals.</p></li>
+<li><p>Slot <span class="citation">@pop</span>: vector indicating the population that each individual belongs to.</p></li>
+<li><p>Slot <span class="citation">@strata</span>: stratification of populations, e.g. within regions or treatments.</p></li>
+<li><p>Slot <span class="citation">@hierarchy</span>: optional formula defining hierarchical levels in strata.</p></li>
+</ul>
+</div>
+</div>
+<div id="import-data-with-gstudio-package" class="section level2">
+<h2>Import data with ‘gstudio’ package</h2>
+<p>While genind objects are used by many functions for analyzing genetic data, the gstudio package provides an interface for additional analysis. We use the function read_population to import the data.</p>
+<pre class="r"><code>?read_population</code></pre>
+<div id="set-arguments" class="section level3">
+<h3>Set arguments</h3>
+<p>Some explanations:</p>
+<ul>
+<li><p><strong>path:</strong> This is the path to the .csv file. If it is in the current working directory, then the filename is sufficient.</p></li>
+<li><p><strong>type:</strong> here we have ‘separated’ data, as the alleles at each locus are separated by a colon.</p></li>
+<li><p><strong>locus.columns:</strong> this would be columns 3 - 10 in this case, because we are importing from the .csv file directly, which does not contain the FrogID variable. We can add that later.</p></li>
+<li><p><strong>phased:</strong> default is fine here.</p></li>
+<li><p><strong>sep:</strong> here this refers to the .csv file! The separater is a comma.</p></li>
+<li><p><strong>header:</strong> yes we have column names.</p></li>
+</ul>
+<p>Working directory confusion: If you are working within an R project folder, then that folder is automatically set as your working directory. If you are working in an R session outside of an R project, then you need to actively set the working directory in the R Studio menu under: Session &gt; Set working directory &gt; Choose Directory.</p>
 <pre class="r"><code>Frogs.gstudio &lt;- read_population(path=system.file(&quot;extdata&quot;, &quot;ralu.loci.csv&quot;, 
                                                   package = &quot;LandGenCourse&quot;), 
                    type=&quot;separated&quot;, locus.columns=c(3:10), 
                    phased=FALSE, sep=&quot;,&quot;, header=TRUE)</code></pre>
-<p>Check imported data Check the column types: SiteName and Pop are now character vectors, and the loci columns A - H are now of class locus (it is indicated that ‘locus’ is a S3 object type).</p>
+</div>
+<div id="check-imported-data" class="section level3">
+<h3>Check imported data</h3>
+<p>Check the column types: SiteName and Pop are now character vectors, and the loci columns A - H are now of class locus (it is indicated that ‘locus’ is a S3 object type).</p>
 <pre class="r"><code>str(Frogs.gstudio)</code></pre>
 <pre><code>## &#39;data.frame&#39;:    181 obs. of  10 variables:
 ##  $ SiteName: chr  &quot;AirplaneLake&quot; &quot;AirplaneLake&quot; &quot;AirplaneLake&quot; &quot;AirplaneLake&quot; ...
@@ -336,7 +515,10 @@ as_tibble(Frogs)</code></pre>
 ##  $ F       : &#39;locus&#39; chr  &quot;1:1&quot; &quot;&quot; &quot;1:1&quot; &quot;&quot; ...
 ##  $ G       : &#39;locus&#39; chr  &quot;1:1&quot; &quot;2:2&quot; &quot;1:1&quot; &quot;&quot; ...
 ##  $ H       : &#39;locus&#39; chr  &quot;4:5&quot; &quot;&quot; &quot;3:3&quot; &quot;&quot; ...</code></pre>
-<p>Add FrogID Frogs.gstudio is a data frame, and we can manipulate like any other data frame. Here we will add the variable FrogID as the first column.</p>
+</div>
+<div id="add-frogid" class="section level3">
+<h3>Add FrogID</h3>
+<p>Frogs.gstudio is a data frame, and we can manipulate like any other data frame. Here we will add the variable FrogID as the first column.</p>
 <pre class="r"><code>Frogs.gstudio &lt;- data.frame(FrogID=Frogs$FrogID, Frogs.gstudio) 
 head(Frogs.gstudio)</code></pre>
 <pre><code>##   FrogID     SiteName      Pop   A   B   C   D   E   F   G   H
@@ -346,7 +528,10 @@ head(Frogs.gstudio)</code></pre>
 ## 4  Air.4 AirplaneLake Airplane 1:1 1:1     2:2 1:2            
 ## 5  Air.5 AirplaneLake Airplane 1:2 1:3 1:1 1:1 1:2 1:1 1:2 4:5
 ## 6  Air.6 AirplaneLake Airplane 1:2 1:1 1:1 1:3 1:1 1:1 1:2 4:5</code></pre>
-<p>Convert to ‘genind’ object We can use the dataframe with the locus objects from gstudio to import the data into a genind object. In this case, we set sep=“:”, because the locus object in gstudio stores the alleles at each locus separated by a colon, and NA.char=““, because gstudio stores missing values as empty cells.</p>
+</div>
+<div id="convert-to-genind-object" class="section level3">
+<h3>Convert to ‘genind’ object</h3>
+<p>We can use the dataframe with the locus objects from gstudio to import the data into a genind object. In this case, we set sep=“:”, because the locus object in gstudio stores the alleles at each locus separated by a colon, and NA.char=““, because gstudio stores missing values as empty cells.</p>
 <pre class="r"><code>Frogs.genind2 &lt;- adegenet::df2genind(X=Frogs.gstudio[,c(4:11)], sep=&quot;:&quot;, ncode=NULL,   
                           ind.names=Frogs.gstudio$FrogID, loc.names=NULL, 
                           pop=Frogs.gstudio$Pop, NA.char=&quot;&quot;, ploidy=2, 
@@ -370,9 +555,20 @@ Frogs.genind2</code></pre>
 ## 
 ##  // Optional content
 ##    @pop: population of each individual (group size range: 7-23)</code></pre>
-<p>mporting SNP data a. Import from text file First, we’ll import a relatively small SNP dataset from a text file. This dataset will be analyzed in the Week 6 Worked Example. The data are stored in a tab-delimited text file.</p>
+</div>
+</div>
+<div id="importing-snp-data" class="section level2">
+<h2>Importing SNP data</h2>
+<div id="import-from-text-file" class="section level3">
+<h3>Import from text file</h3>
+<p>First, we’ll import a relatively small SNP dataset from a text file. This dataset will be analyzed in the Week 6 Worked Example. The data are stored in a tab-delimited text file.</p>
 <p>Let’s have a look at the first few rows and columns:</p>
-<p>family: these are ID’s of the genotyped tree individuals (from which seeds were grown in a common-garden experiment, hence they are called “family” in the dataset). population: the trees were sampled from a set of populations. snpXXX.Plmn: each column is a diploid SNP. To import your own data, replace infile by the path to the text file with your SNP data. Change settings as necessary (check whether data are separated by tabs or commas!).</p>
+<ul>
+<li><p><strong>family</strong>: these are ID’s of the genotyped tree individuals (from which seeds were grown in a common-garden experiment, hence they are called “family” in the dataset).</p></li>
+<li><p><strong>population:</strong> the trees were sampled from a set of populations.</p></li>
+<li><p><strong>snpXXX.Plmn:</strong> each column is a diploid SNP.</p></li>
+</ul>
+<p>To import your own data, replace infile by the path to the text file with your SNP data. Change settings as necessary (check whether data are separated by tabs or commas!).</p>
 <pre class="r"><code>infile &lt;- system.file(&quot;extdata&quot;, &quot;WWP_SNP_genotypes.txt&quot;, package = &quot;LandGenCourse&quot;)
 Trees &lt;- read.table(infile, header = TRUE, sep = &quot;\t&quot;)
 Trees[1:6, 1:6]</code></pre>
@@ -386,7 +582,11 @@ Trees[1:6, 1:6]</code></pre>
 <p>We should replace the SNP column names: if they contain a period ., then the function df2genind thinks that the first part indicates the locus and the second part the allele. The following line of code splits each column name by the period and only retains the first part.</p>
 <pre class="r"><code>names(Trees) &lt;- unlist(lapply(names(Trees), function(x) strsplit(x, &quot;[.]&quot;)[[1]][1]))</code></pre>
 <p>To import these data frame into a genind object, we need to tell R how the SNP data are coded (check the df2genind help file!)</p>
-<p>ncode = 1: each allele (A, C, G, T) is coded with a single character. sep = ““: the two alleles per individual and locus are not separated by any symbol. NA.char=”NA”: missing values are coded as NA.</p>
+<ul>
+<li><p><strong>ncode = 1:</strong> each allele (A, C, G, T) is coded with a single character.</p></li>
+<li><p><strong>sep = ““:</strong> the two alleles per individual and locus are not separated by any symbol.</p></li>
+<li><p><strong>NA.char= “NA”:</strong> missing values are coded as NA.</p></li>
+</ul>
 <pre class="r"><code>Trees.genind &lt;- adegenet::df2genind(X=Trees[,-c(1:2)], sep=&quot;&quot;, ncode=1,   
                           ind.names=Trees$family, loc.names=NULL, 
                           pop=Trees$population, NA.char=&quot;NA&quot;, ploidy=2, 
@@ -410,12 +610,27 @@ Trees.genind</code></pre>
 ## 
 ##  // Optional content
 ##    @pop: population of each individual (group size range: 9-22)</code></pre>
-<p>Import from vcf file to genind object The R package vcfR makes it easy to import vcf files and convert to other formats. Here we use it to convert the data into a genind object. The following code is adapted from the above listed vcfR vignettes.</p>
+</div>
+<div id="import-from-vcf-file-to-genind-object" class="section level3">
+<h3>Import from vcf file to genind object</h3>
+<p>A common data format for genomic data is vcf. Here’s some background information (all but the first are vignettes from the vcfR package):</p>
+<ul>
+<li><p>PDF defining the data format: <a href="https://samtools.github.io/hts-specs/VCFv4.3.pdf" class="uri">https://samtools.github.io/hts-specs/VCFv4.3.pdf</a></p></li>
+<li><p>Tutorial on data format: <a href="https://cran.r-project.org/web/packages/vcfR/vignettes/vcf_data.html" class="uri">https://cran.r-project.org/web/packages/vcfR/vignettes/vcf_data.html</a></p></li>
+<li><p>Tutorial on quality testing: <a href="https://cran.r-project.org/web/packages/vcfR/vignettes/intro_to_vcfR.html" class="uri">https://cran.r-project.org/web/packages/vcfR/vignettes/intro_to_vcfR.html</a></p></li>
+</ul>
+<p>*Tutorial on converting vcf data: <a href="https://cran.r-project.org/web/packages/vcfR/vignettes/converting_data.html" class="uri">https://cran.r-project.org/web/packages/vcfR/vignettes/converting_data.html</a></p>
+<p>The R package vcfR makes it easy to import vcf files and convert to other formats. Here we use it to convert the data into a genind object. The following code is adapted from the above listed vcfR vignettes.</p>
 <p>We’ll import a file that is distributed with the pinfsc50 package. Note that vcf files are commonly compressed in gz archives. To import your own data, replace vcf_file by the path to your own gz archive.</p>
 <pre class="r"><code>vcf_file &lt;- system.file(&quot;extdata&quot;, &quot;pinf_sc50.vcf.gz&quot;, package = &quot;pinfsc50&quot;)
 vcf &lt;- read.vcfR( vcf_file, verbose = FALSE )</code></pre>
 <p>Note that the package vcfR can import three types of genomic data files listed below. We will only use the .vcf file here.</p>
-<p>.vcf: SNPs .fasta: genomic reference sequence data .gff: annotation Convert to genind object:</p>
+<ul>
+<li><p><strong>.vcf:</strong> SNPs</p></li>
+<li><p><strong>.fasta:</strong> genomic reference sequence data</p></li>
+<li><p><strong>.gff:</strong> annotation</p></li>
+</ul>
+<p>Convert to genind object:</p>
 <pre class="r"><code>SNP_genind &lt;- vcfR2genind(vcf)
 SNP_genind</code></pre>
 <pre><code>## /// GENIND OBJECT /////////
@@ -433,7 +648,10 @@ SNP_genind</code></pre>
 ## 
 ##  // Optional content
 ##    - empty -</code></pre>
-<p>Import from vcf file to genlight object This dataset has 18 individuals genotyped at 44,137. It may be better to use a genlight object instead of genind. This is an alternative object type from the package adegenet that can store large genomic data much more efficiently.</p>
+</div>
+<div id="import-from-vcf-file-to-genlight-object" class="section level3">
+<h3>Import from vcf file to genlight object</h3>
+<p>This dataset has 18 individuals genotyped at 44,137. It may be better to use a genlight object instead of genind. This is an alternative object type from the package adegenet that can store large genomic data much more efficiently.</p>
 <p>Note: the current implementation can only store two alleles per locus, loci with more alleles will be dropped and a warning is printed.</p>
 <pre class="r"><code>SNP_genlight &lt;- vcfR2genlight(vcf)</code></pre>
 <pre><code>## Warning in vcfR2genlight(vcf): Found 312 loci with more than two alleles.
@@ -455,167 +673,145 @@ SNP_genind</code></pre>
 ##    @position: integer storing positions of the SNPs
 ##    @other: a list containing: elements without names</code></pre>
 <p>Note that instead of 44,137 alleles, we now have 21,719 binary SNPs. This is one of the ways by which the genlight object is more efficient than genind. Overall, the size has been reduced from 16.4 Mb to 2.2 Mb!</p>
-<div id="now-i-try" class="section level2">
-<h2>NOW I TRY</h2>
-<p>load in old 2016 KAD data</p>
-<pre class="r"><code>kad_data &lt;- read.csv(&quot;~/Desktop/landscape_genetics_2022/labs/landgen_lab1/KAD_originaldata.csv&quot;)</code></pre>
-<pre class="r"><code>Kad.genind &lt;- df2genind(X=kad_data[,c(3:24)], sep=&quot;column&quot;, ncode=NULL, ind.names= kad_data$useful_id, loc.names=NULL, pop=kad_data$population_id, NA.char=&quot;NA&quot;, ploidy=2, type=&quot;codom&quot;, strata=NULL, hierarchy=NULL)</code></pre>
+</div>
+</div>
+</div>
+<div id="lab-example-2" class="section level1">
+<h1>Lab Example 2</h1>
+<p>Example 2 will incorporate old and current data regarding the ongoing research of the Kentucky Arrow Darter in Dr. Johansen’s Lab at APSU.</p>
+<div id="load-in-2016-kentucky-arrow-darter-original-data" class="section level3">
+<h3>Load in 2016 Kentucky Arrow Darter original data</h3>
+<pre class="r"><code>kad_data &lt;- read.csv(&quot;~/Desktop/landscape_genetics_2022/labs/landgen_lab2_geneticdiversity/kad_dataset.csv&quot;)</code></pre>
+</div>
+<div id="create-genind-object" class="section level3">
+<h3>Create genind object</h3>
+<pre class="r"><code>Kad.genind &lt;- df2genind(X=kad_data[,c(3:13)], sep=&quot;:&quot;, ncode=NULL, ind.names= kad_data$Useful_ID, loc.names=NULL, pop=kad_data$Population_ID, NA.char=&quot;NA&quot;, ploidy=2, type=&quot;codom&quot;, strata=NULL, hierarchy=NULL)</code></pre>
+</div>
+<div id="check-imported-data-1" class="section level3">
+<h3>Check Imported Data</h3>
+<p>Printing the genind object’s name lists the number of individuals, loci and alleles, and lists all slots (prefaced by @).</p>
 <pre class="r"><code>Kad.genind</code></pre>
 <pre><code>## /// GENIND OBJECT /////////
 ## 
-##  // 213 individuals; 22 loci; 223 alleles; size: 244.6 Kb
+##  // 213 individuals; 11 loci; 117 alleles; size: 138.6 Kb
 ## 
 ##  // Basic content
-##    @tab:  213 x 223 matrix of allele counts
-##    @loc.n.all: number of alleles per locus (range: 3-27)
-##    @loc.fac: locus factor for the 223 columns of @tab
+##    @tab:  213 x 117 matrix of allele counts
+##    @loc.n.all: number of alleles per locus (range: 3-31)
+##    @loc.fac: locus factor for the 117 columns of @tab
 ##    @all.names: list of allele names for each locus
 ##    @ploidy: ploidy of each individual  (range: 2-2)
 ##    @type:  codom
-##    @call: df2genind(X = kad_data[, c(3:24)], sep = &quot;column&quot;, ncode = NULL, 
-##     ind.names = kad_data$useful_id, loc.names = NULL, pop = kad_data$population_id, 
-##     NA.char = &quot;NA&quot;, ploidy = 2, type = &quot;codom&quot;, strata = NULL, 
-##     hierarchy = NULL)
+##    @call: df2genind(X = kad_data[, c(3:13)], sep = &quot;:&quot;, ncode = NULL, ind.names = kad_data$Useful_ID, 
+##     loc.names = NULL, pop = kad_data$Population_ID, NA.char = &quot;NA&quot;, 
+##     ploidy = 2, type = &quot;codom&quot;, strata = NULL, hierarchy = NULL)
 ## 
 ##  // Optional content
 ##    @pop: population of each individual (group size range: 9-31)</code></pre>
-<p>summarize the data</p>
+</div>
+<div id="summarize-genind-object-1" class="section level3">
+<h3>Summarize ‘genind’ object</h3>
 <pre class="r"><code>summary(Kad.genind)</code></pre>
 <pre><code>## 
 ## // Number of individuals: 213
 ## // Group sizes: 24 19 26 24 9 27 14 31 18 21
-## // Number of alleles per locus: 5 5 3 3 9 10 9 8 10 9 9 11 10 11 10 12 27 24 15 16 3 4
-## // Number of alleles per group: 93 49 82 42 26 69 67 79 95 107
-## // Percentage of missing data: 0 %
-## // Observed heterozygosity: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-## // Expected heterozygosity: 0.55 0.53 0.22 0.16 0.45 0.73 0.54 0.55 0.82 0.82 0.83 0.82 0.88 0.87 0.81 0.84 0.92 0.94 0.86 0.9 0.42 0.53</code></pre>
-<p>allele counts, where each column is an allele</p>
+## // Number of alleles per locus: 5 3 10 8 10 10 10 11 31 16 3
+## // Number of alleles per group: 60 29 51 25 14 41 41 44 62 58
+## // Percentage of missing data: 2.94 %
+## // Observed heterozygosity: 0.3 0.04 0.45 0.42 0.63 0.51 0.7 0.49 0.69 0.6 0.22
+## // Expected heterozygosity: 0.54 0.19 0.63 0.55 0.83 0.84 0.88 0.82 0.94 0.88 0.48</code></pre>
+</div>
+<div id="view-information-stored-in-genind-object-1" class="section level3">
+<h3>View information stored in ‘genind’ object</h3>
+<div id="slot-tab-1" class="section level4">
+<h4>Slot <span class="citation">@tab</span></h4>
+<p>Table with allele counts, where each column is an allele. Allele name A.1 means “locus A, allele 1.” For a codominant marker (e.g. microsatellite) and a diploid species, allele counts per individual can be 0, 1, 2, or NA=missing. Here are the first few lines:</p>
 <pre class="r"><code>as_tibble(Kad.genind@tab)</code></pre>
-<pre><code>## # A tibble: 213 × 223
-##    C2_A.141 C2_A.145 C2_A.133 C2_A.129 C2_A.0 C2_B.145 C2_B.141 C2_B.133
-##       &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;  &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
-##  1        1        0        0        0      0        1        0        0
-##  2        0        1        0        0      0        1        0        0
-##  3        1        0        0        0      0        1        0        0
-##  4        0        0        1        0      0        0        1        0
-##  5        0        1        0        0      0        1        0        0
-##  6        1        0        0        0      0        1        0        0
-##  7        1        0        0        0      0        1        0        0
-##  8        1        0        0        0      0        1        0        0
-##  9        1        0        0        0      0        1        0        0
-## 10        1        0        0        0      0        1        0        0
-## # … with 203 more rows, and 215 more variables: C2_B.148 &lt;int&gt;, C2_B.0 &lt;int&gt;,
-## #   C3_A.214 &lt;int&gt;, C3_A.210 &lt;int&gt;, C3_A.212 &lt;int&gt;, C3_B.214 &lt;int&gt;,
-## #   C3_B.210 &lt;int&gt;, C3_B.212 &lt;int&gt;, C6_A.272 &lt;int&gt;, C6_A.256 &lt;int&gt;,
-## #   C6_A.280 &lt;int&gt;, C6_A.260 &lt;int&gt;, C6_A.268 &lt;int&gt;, C6_A.246 &lt;int&gt;,
-## #   C6_A.264 &lt;int&gt;, C6_A.254 &lt;int&gt;, C6_A.0 &lt;int&gt;, C6_B.280 &lt;int&gt;,
-## #   C6_B.272 &lt;int&gt;, C6_B.284 &lt;int&gt;, C6_B.276 &lt;int&gt;, C6_B.260 &lt;int&gt;,
-## #   C6_B.256 &lt;int&gt;, C6_B.268 &lt;int&gt;, C6_B.246 &lt;int&gt;, C6_B.264 &lt;int&gt;, …</code></pre>
+<pre><code>## # A tibble: 213 × 117
+##    C2.141 C2.145 C2.133 C2.129 C2.148 C3.214 C3.210 C3.212 C6.272 C6.280 C6.256
+##     &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;
+##  1      1      1      0      0      0      2      0      0      1      1      0
+##  2      0      2      0      0      0      2      0      0      2      0      0
+##  3      1      1      0      0      0      2      0      0      0      1      1
+##  4      1      0      1      0      0      2      0      0      1      1      0
+##  5      0      2      0      0      0      2      0      0      1      1      0
+##  6      1      1      0      0      0      2      0      0      1      1      0
+##  7      1      1      0      0      0      2      0      0      0      0      1
+##  8      1      1      0      0      0      2      0      0      0      1      1
+##  9      1      1      0      0      0      2      0      0      2      0      0
+## 10      1      1      0      0      0      2      0      0      1      0      1
+## # … with 203 more rows, and 106 more variables: C6.284 &lt;int&gt;, C6.276 &lt;int&gt;,
+## #   C6.260 &lt;int&gt;, C6.268 &lt;int&gt;, C6.246 &lt;int&gt;, C6.264 &lt;int&gt;, C6.254 &lt;int&gt;,
+## #   C117.300 &lt;int&gt;, C117.304 &lt;int&gt;, C117.282 &lt;int&gt;, C117.294 &lt;int&gt;,
+## #   C117.278 &lt;int&gt;, C117.274 &lt;int&gt;, C117.306 &lt;int&gt;, C117.290 &lt;int&gt;,
+## #   D131.207 &lt;int&gt;, D131.191 &lt;int&gt;, D131.199 &lt;int&gt;, D131.195 &lt;int&gt;,
+## #   D131.203 &lt;int&gt;, D131.215 &lt;int&gt;, D131.187 &lt;int&gt;, D131.211 &lt;int&gt;,
+## #   D131.219 &lt;int&gt;, D131.183 &lt;int&gt;, C26b.203 &lt;int&gt;, C26b.207 &lt;int&gt;, …</code></pre>
+</div>
+<div id="slot-loc.n.all-1" class="section level4">
+<h4>Slot <span class="citation">@loc.n.all</span></h4>
 <p>Number of alleles per locus, across all populations.</p>
 <pre class="r"><code>Kad.genind@loc.n.all</code></pre>
-<pre><code>##   C2_A   C2_B   C3_A   C3_B   C6_A   C6_B C117_A C117_B D131_A D131_B C26b_A 
-##      5      5      3      3      9     10      9      8     10      9      9 
-## C26b_B Cv12_A Cv12_B  D10_A  D10_B  D11_A  D11_B D107_A D107_B D116_A D116_B 
-##     11     10     11     10     12     27     24     15     16      3      4</code></pre>
+<pre><code>##   C2   C3   C6 C117 D131 C26b Cv12  D10  D11 D107 D116 
+##    5    3   10    8   10   10   10   11   31   16    3</code></pre>
+</div>
+<div id="slot-loc.fac-1" class="section level4">
+<h4>Slot <span class="citation">@loc.fac</span></h4>
 <p>This is a factor that indicates for each allele (column in <span class="citation">@tab</span>) which locus it belongs to. The levels of the factor correspond to the loci.</p>
 <pre class="r"><code>Kad.genind@loc.fac</code></pre>
-<pre><code>##   [1] C2_A   C2_A   C2_A   C2_A   C2_A   C2_B   C2_B   C2_B   C2_B   C2_B  
-##  [11] C3_A   C3_A   C3_A   C3_B   C3_B   C3_B   C6_A   C6_A   C6_A   C6_A  
-##  [21] C6_A   C6_A   C6_A   C6_A   C6_A   C6_B   C6_B   C6_B   C6_B   C6_B  
-##  [31] C6_B   C6_B   C6_B   C6_B   C6_B   C117_A C117_A C117_A C117_A C117_A
-##  [41] C117_A C117_A C117_A C117_A C117_B C117_B C117_B C117_B C117_B C117_B
-##  [51] C117_B C117_B D131_A D131_A D131_A D131_A D131_A D131_A D131_A D131_A
-##  [61] D131_A D131_A D131_B D131_B D131_B D131_B D131_B D131_B D131_B D131_B
-##  [71] D131_B C26b_A C26b_A C26b_A C26b_A C26b_A C26b_A C26b_A C26b_A C26b_A
-##  [81] C26b_B C26b_B C26b_B C26b_B C26b_B C26b_B C26b_B C26b_B C26b_B C26b_B
-##  [91] C26b_B Cv12_A Cv12_A Cv12_A Cv12_A Cv12_A Cv12_A Cv12_A Cv12_A Cv12_A
-## [101] Cv12_A Cv12_B Cv12_B Cv12_B Cv12_B Cv12_B Cv12_B Cv12_B Cv12_B Cv12_B
-## [111] Cv12_B Cv12_B D10_A  D10_A  D10_A  D10_A  D10_A  D10_A  D10_A  D10_A 
-## [121] D10_A  D10_A  D10_B  D10_B  D10_B  D10_B  D10_B  D10_B  D10_B  D10_B 
-## [131] D10_B  D10_B  D10_B  D10_B  D11_A  D11_A  D11_A  D11_A  D11_A  D11_A 
-## [141] D11_A  D11_A  D11_A  D11_A  D11_A  D11_A  D11_A  D11_A  D11_A  D11_A 
-## [151] D11_A  D11_A  D11_A  D11_A  D11_A  D11_A  D11_A  D11_A  D11_A  D11_A 
-## [161] D11_A  D11_B  D11_B  D11_B  D11_B  D11_B  D11_B  D11_B  D11_B  D11_B 
-## [171] D11_B  D11_B  D11_B  D11_B  D11_B  D11_B  D11_B  D11_B  D11_B  D11_B 
-## [181] D11_B  D11_B  D11_B  D11_B  D11_B  D107_A D107_A D107_A D107_A D107_A
-## [191] D107_A D107_A D107_A D107_A D107_A D107_A D107_A D107_A D107_A D107_A
-## [201] D107_B D107_B D107_B D107_B D107_B D107_B D107_B D107_B D107_B D107_B
-## [211] D107_B D107_B D107_B D107_B D107_B D107_B D116_A D116_A D116_A D116_B
-## [221] D116_B D116_B D116_B
-## 22 Levels: C2_A C2_B C3_A C3_B C6_A C6_B C117_A C117_B D131_A D131_B ... D116_B</code></pre>
+<pre><code>##   [1] C2   C2   C2   C2   C2   C3   C3   C3   C6   C6   C6   C6   C6   C6   C6  
+##  [16] C6   C6   C6   C117 C117 C117 C117 C117 C117 C117 C117 D131 D131 D131 D131
+##  [31] D131 D131 D131 D131 D131 D131 C26b C26b C26b C26b C26b C26b C26b C26b C26b
+##  [46] C26b Cv12 Cv12 Cv12 Cv12 Cv12 Cv12 Cv12 Cv12 Cv12 Cv12 D10  D10  D10  D10 
+##  [61] D10  D10  D10  D10  D10  D10  D10  D11  D11  D11  D11  D11  D11  D11  D11 
+##  [76] D11  D11  D11  D11  D11  D11  D11  D11  D11  D11  D11  D11  D11  D11  D11 
+##  [91] D11  D11  D11  D11  D11  D11  D11  D11  D107 D107 D107 D107 D107 D107 D107
+## [106] D107 D107 D107 D107 D107 D107 D107 D107 D107 D116 D116 D116
+## Levels: C2 C3 C6 C117 D131 C26b Cv12 D10 D11 D107 D116</code></pre>
+</div>
+<div id="slot-all.names-1" class="section level4">
+<h4>Slot <span class="citation">@all.names</span></h4>
 <p>List of allele names, separately for each locus. Note: the alleles are treated as text (character), even if they are coded as numbers. They are sorted in order of occurrence in data set.</p>
 <pre class="r"><code>Kad.genind@all.names</code></pre>
-<pre><code>## $C2_A
-## [1] &quot;141&quot; &quot;145&quot; &quot;133&quot; &quot;129&quot; &quot;0&quot;  
+<pre><code>## $C2
+## [1] &quot;141&quot; &quot;145&quot; &quot;133&quot; &quot;129&quot; &quot;148&quot;
 ## 
-## $C2_B
-## [1] &quot;145&quot; &quot;141&quot; &quot;133&quot; &quot;148&quot; &quot;0&quot;  
-## 
-## $C3_A
+## $C3
 ## [1] &quot;214&quot; &quot;210&quot; &quot;212&quot;
 ## 
-## $C3_B
-## [1] &quot;214&quot; &quot;210&quot; &quot;212&quot;
+## $C6
+##  [1] &quot;272&quot; &quot;280&quot; &quot;256&quot; &quot;284&quot; &quot;276&quot; &quot;260&quot; &quot;268&quot; &quot;246&quot; &quot;264&quot; &quot;254&quot;
 ## 
-## $C6_A
-## [1] &quot;272&quot; &quot;256&quot; &quot;280&quot; &quot;260&quot; &quot;268&quot; &quot;246&quot; &quot;264&quot; &quot;254&quot; &quot;0&quot;  
+## $C117
+## [1] &quot;300&quot; &quot;304&quot; &quot;282&quot; &quot;294&quot; &quot;278&quot; &quot;274&quot; &quot;306&quot; &quot;290&quot;
 ## 
-## $C6_B
-##  [1] &quot;280&quot; &quot;272&quot; &quot;284&quot; &quot;276&quot; &quot;260&quot; &quot;256&quot; &quot;268&quot; &quot;246&quot; &quot;264&quot; &quot;0&quot;  
+## $D131
+##  [1] &quot;207&quot; &quot;191&quot; &quot;199&quot; &quot;195&quot; &quot;203&quot; &quot;215&quot; &quot;187&quot; &quot;211&quot; &quot;219&quot; &quot;183&quot;
 ## 
-## $C117_A
-## [1] &quot;300&quot; &quot;282&quot; &quot;304&quot; &quot;294&quot; &quot;278&quot; &quot;274&quot; &quot;306&quot; &quot;290&quot; &quot;0&quot;  
+## $C26b
+##  [1] &quot;203&quot; &quot;207&quot; &quot;195&quot; &quot;183&quot; &quot;215&quot; &quot;211&quot; &quot;231&quot; &quot;219&quot; &quot;223&quot; &quot;199&quot;
 ## 
-## $C117_B
-## [1] &quot;304&quot; &quot;300&quot; &quot;282&quot; &quot;294&quot; &quot;278&quot; &quot;274&quot; &quot;306&quot; &quot;0&quot;  
+## $Cv12
+##  [1] &quot;231&quot; &quot;239&quot; &quot;215&quot; &quot;219&quot; &quot;235&quot; &quot;207&quot; &quot;227&quot; &quot;223&quot; &quot;243&quot; &quot;211&quot;
 ## 
-## $D131_A
-##  [1] &quot;207&quot; &quot;191&quot; &quot;199&quot; &quot;195&quot; &quot;187&quot; &quot;203&quot; &quot;215&quot; &quot;183&quot; &quot;211&quot; &quot;0&quot;  
+## $D10
+##  [1] &quot;288&quot; &quot;300&quot; &quot;312&quot; &quot;304&quot; &quot;302&quot; &quot;308&quot; &quot;292&quot; &quot;328&quot; &quot;296&quot; &quot;316&quot; &quot;320&quot;
 ## 
-## $D131_B
-## [1] &quot;207&quot; &quot;203&quot; &quot;215&quot; &quot;191&quot; &quot;211&quot; &quot;199&quot; &quot;219&quot; &quot;195&quot; &quot;0&quot;  
+## $D11
+##  [1] &quot;296&quot; &quot;302&quot; &quot;300&quot; &quot;312&quot; &quot;328&quot; &quot;304&quot; &quot;316&quot; &quot;306&quot; &quot;324&quot; &quot;298&quot; &quot;308&quot; &quot;344&quot;
+## [13] &quot;320&quot; &quot;294&quot; &quot;290&quot; &quot;410&quot; &quot;414&quot; &quot;418&quot; &quot;318&quot; &quot;404&quot; &quot;422&quot; &quot;356&quot; &quot;310&quot; &quot;426&quot;
+## [25] &quot;398&quot; &quot;400&quot; &quot;434&quot; &quot;314&quot; &quot;430&quot; &quot;436&quot; &quot;440&quot;
 ## 
-## $C26b_A
-## [1] &quot;203&quot; &quot;207&quot; &quot;195&quot; &quot;183&quot; &quot;231&quot; &quot;219&quot; &quot;211&quot; &quot;215&quot; &quot;0&quot;  
+## $D107
+##  [1] &quot;286&quot; &quot;302&quot; &quot;254&quot; &quot;246&quot; &quot;250&quot; &quot;258&quot; &quot;242&quot; &quot;290&quot; &quot;266&quot; &quot;306&quot; &quot;274&quot; &quot;278&quot;
+## [13] &quot;262&quot; &quot;282&quot; &quot;270&quot; &quot;158&quot;
 ## 
-## $C26b_B
-##  [1] &quot;203&quot; &quot;207&quot; &quot;195&quot; &quot;183&quot; &quot;215&quot; &quot;211&quot; &quot;231&quot; &quot;219&quot; &quot;223&quot; &quot;199&quot; &quot;0&quot;  
-## 
-## $Cv12_A
-##  [1] &quot;231&quot; &quot;215&quot; &quot;219&quot; &quot;207&quot; &quot;235&quot; &quot;227&quot; &quot;239&quot; &quot;223&quot; &quot;211&quot; &quot;0&quot;  
-## 
-## $Cv12_B
-##  [1] &quot;239&quot; &quot;231&quot; &quot;219&quot; &quot;235&quot; &quot;215&quot; &quot;227&quot; &quot;243&quot; &quot;223&quot; &quot;207&quot; &quot;211&quot; &quot;0&quot;  
-## 
-## $D10_A
-##  [1] &quot;288&quot; &quot;300&quot; &quot;304&quot; &quot;292&quot; &quot;312&quot; &quot;296&quot; &quot;316&quot; &quot;308&quot; &quot;0&quot;   &quot;320&quot;
-## 
-## $D10_B
-##  [1] &quot;288&quot; &quot;312&quot; &quot;302&quot; &quot;308&quot; &quot;292&quot; &quot;328&quot; &quot;300&quot; &quot;296&quot; &quot;316&quot; &quot;320&quot; &quot;0&quot;   &quot;304&quot;
-## 
-## $D11_A
-##  [1] &quot;296&quot; &quot;300&quot; &quot;312&quot; &quot;304&quot; &quot;316&quot; &quot;306&quot; &quot;328&quot; &quot;302&quot; &quot;298&quot; &quot;294&quot; &quot;290&quot; &quot;410&quot;
-## [13] &quot;414&quot; &quot;318&quot; &quot;404&quot; &quot;356&quot; &quot;418&quot; &quot;310&quot; &quot;400&quot; &quot;398&quot; &quot;426&quot; &quot;308&quot; &quot;314&quot; &quot;0&quot;  
-## [25] &quot;436&quot; &quot;430&quot; &quot;422&quot;
-## 
-## $D11_B
-##  [1] &quot;302&quot; &quot;312&quot; &quot;328&quot; &quot;306&quot; &quot;324&quot; &quot;298&quot; &quot;308&quot; &quot;300&quot; &quot;316&quot; &quot;344&quot; &quot;320&quot; &quot;410&quot;
-## [13] &quot;414&quot; &quot;418&quot; &quot;318&quot; &quot;422&quot; &quot;310&quot; &quot;426&quot; &quot;398&quot; &quot;400&quot; &quot;434&quot; &quot;0&quot;   &quot;430&quot; &quot;440&quot;
-## 
-## $D107_A
-##  [1] &quot;286&quot; &quot;254&quot; &quot;246&quot; &quot;242&quot; &quot;250&quot; &quot;302&quot; &quot;258&quot; &quot;0&quot;   &quot;274&quot; &quot;262&quot; &quot;278&quot; &quot;270&quot;
-## [13] &quot;282&quot; &quot;266&quot; &quot;158&quot;
-## 
-## $D107_B
-##  [1] &quot;302&quot; &quot;286&quot; &quot;250&quot; &quot;258&quot; &quot;242&quot; &quot;254&quot; &quot;246&quot; &quot;290&quot; &quot;266&quot; &quot;306&quot; &quot;0&quot;   &quot;278&quot;
-## [13] &quot;274&quot; &quot;262&quot; &quot;282&quot; &quot;270&quot;
-## 
-## $D116_A
-## [1] &quot;246&quot; &quot;250&quot; &quot;0&quot;  
-## 
-## $D116_B
-## [1] &quot;250&quot; &quot;246&quot; &quot;0&quot;   &quot;254&quot;</code></pre>
-<p>ploidy for each individual (should be 2)</p>
+## $D116
+## [1] &quot;246&quot; &quot;250&quot; &quot;254&quot;</code></pre>
+</div>
+<div id="slot-ploidy" class="section level4">
+<h4>Slot <span class="citation">@ploidy</span></h4>
+<p>Ploidy for each individual (should be 2)</p>
 <pre class="r"><code>Kad.genind@ploidy</code></pre>
 <pre><code>##   [1] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
 ##  [38] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
@@ -623,10 +819,16 @@ SNP_genind</code></pre>
 ## [112] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
 ## [149] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
 ## [186] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2</code></pre>
-<p>codominant (microsatellites) or presence/absence (SNP, AFLP)</p>
+</div>
+<div id="slot-type" class="section level4">
+<h4>Slot <span class="citation">@type</span></h4>
+<p>Codominant (microsatellites) or presence/absence (SNP, AFLP)</p>
 <pre class="r"><code>Kad.genind@type</code></pre>
 <pre><code>## [1] &quot;codom&quot;</code></pre>
-<p>vector indicating the population that each individual belongs to</p>
+</div>
+<div id="slot-pop" class="section level4">
+<h4>Slot <span class="citation">@pop</span></h4>
+<p>Vector indicating the population that each individual belongs to</p>
 <pre class="r"><code>Kad.genind@pop</code></pre>
 <pre><code>##   [1] 1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1  2 
 ##  [26] 2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  3  3  3  3  3  3  3 
@@ -638,6 +840,8 @@ SNP_genind</code></pre>
 ## [176] 9  9  9  9  9  9  9  9  9  9  9  9  9  9  9  9  9  10 10 10 10 10 10 10 10
 ## [201] 10 10 10 10 10 10 10 10 10 10 10 10 10
 ## Levels: 1 2 3 4 5 6 7 8 9 10</code></pre>
+</div>
+</div>
 </div>
 
 
